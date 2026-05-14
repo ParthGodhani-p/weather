@@ -7,6 +7,7 @@ function App() {
   const [forecast, setForecast] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [citiesList, setCitiesList] = useState([]);
 
   // Get API key from environment variables
   const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY || 'abc123def456';
@@ -55,15 +56,15 @@ function App() {
     }
   }, [API_KEY]);
 
-  const fetchWeatherByCity = async () => {
-    if (!city.trim()) return;
+  const fetchWeatherByCity = async (cityName = city) => {
+    if (!cityName.trim()) return;
     setLoading(true);
     setError('');
     setCurrentWeather(null);
     setForecast([]);
     try {
       // First, get coordinates from city name
-      const geoUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(city)}&limit=1&appid=${API_KEY}`;
+      const geoUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(cityName)}&limit=1&appid=${API_KEY}`;
       const geoResponse = await fetch(geoUrl);
       
       if (!geoResponse.ok || API_KEY === 'abc123def456') {
@@ -76,7 +77,15 @@ function App() {
       }
       
       const { lat, lon } = geoData[0];
-      await fetchWeatherData(lat, lon, city);
+      await fetchWeatherData(lat, lon, cityName);
+      
+      // Add city to list if not already present
+      setCitiesList((prevList) => {
+        if (!prevList.includes(cityName)) {
+          return [cityName, ...prevList];
+        }
+        return prevList;
+      });
     } catch (err) {
       setError(err.message);
       setLoading(false);
@@ -87,6 +96,15 @@ function App() {
     if (e.key === 'Enter') {
       fetchWeatherByCity();
     }
+  };
+
+  const handleCityClick = (selectedCity) => {
+    setCity(selectedCity);
+    fetchWeatherByCity(selectedCity);
+  };
+
+  const removeCityFromList = (cityToRemove) => {
+    setCitiesList((prevList) => prevList.filter((c) => c !== cityToRemove));
   };
 
   return (
@@ -107,6 +125,30 @@ function App() {
               {loading ? 'Searching...' : 'Search'}
             </button>
           </div>
+          {citiesList.length > 0 && (
+            <div className="cities-list">
+              <h3>Recent Cities:</h3>
+              <ul className="city-items">
+                {citiesList.map((cityItem) => (
+                  <li key={cityItem} className="city-item">
+                    <button
+                      className="city-button"
+                      onClick={() => handleCityClick(cityItem)}
+                    >
+                      {cityItem}
+                    </button>
+                    <button
+                      className="remove-button"
+                      onClick={() => removeCityFromList(cityItem)}
+                      title="Remove city"
+                    >
+                      ×
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
 
         {loading && (

@@ -292,6 +292,75 @@ body {
   color: #999;
 }
 
+/* Cities List Styles */
+.cities-list {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 2px solid #e0e0e0;
+}
+
+.cities-list h3 {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.city-items {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.city-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.city-button {
+  padding: 8px 15px;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(245, 87, 108, 0.3);
+}
+
+.city-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 87, 108, 0.5);
+}
+
+.remove-button {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: #f0f0f0;
+  color: #999;
+  border: none;
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.remove-button:hover {
+  background: #f5576c;
+  color: #fff;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .app-container {
